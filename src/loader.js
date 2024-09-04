@@ -67,24 +67,35 @@ const discountedData = data.map((item) => {
 // if (firstCamSale) console.log(firstCamSale.price);
 
 // send discounted data to Algolia
-const postDataToAlgolia = () => {
-  try {
-    const client = algoliasearch(
-      process.env.ALGOLIA_APP_ID,
-      process.env.ALGOLIA_API_KEY
-    );
+const client = algoliasearch(
+  process.env.ALGOLIA_APP_ID,
+  process.env.ALGOLIA_API_KEY
+);
 
-    const index = client.initIndex(process.env.ALGOLIA_INDEX);
-    index
-      .saveObjects(discountedData, {
-        autoGenerateObjectIDIfNotExist: true,
-      })
-      .then(() => {
-        console.log('Algolia upload successful!');
-      });
+const index = client.initIndex(process.env.ALGOLIA_INDEX);
+
+const postIndexToAlgolia = async (index) => {
+  try {
+    const indexExists = await index.exists();
+
+    if (indexExists) {
+      console.log(`Index: ${process.env.ALGOLIA_INDEX} already exists.`);
+      return;
+    }
+    await index.setSettings({
+      attributesForFaceting: ['searchable(brand)', 'searchable(categories)'],
+      searchableAttributes: ['description', 'name', 'type'],
+      customRanking: ['asc(popularity)', 'desc(rating)'],
+    });
+
+    await index.saveObjects(discountedData, {
+      autoGenerateObjectIDIfNotExist: true,
+    });
+
+    console.log('Algolia upload successful!');
   } catch (error) {
     console.error(error);
   }
 };
 
-// postDataToAlgolia();
+postIndexToAlgolia(index);
