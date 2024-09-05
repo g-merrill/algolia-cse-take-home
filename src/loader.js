@@ -72,7 +72,7 @@ const client = algoliasearch(
   process.env.ALGOLIA_API_KEY
 );
 
-const index = client.initIndex(process.env.ALGOLIA_INDEX);
+const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX);
 
 const postIndexToAlgolia = async (index) => {
   try {
@@ -82,6 +82,7 @@ const postIndexToAlgolia = async (index) => {
       console.log(`Index: ${process.env.ALGOLIA_INDEX} already exists.`);
       return;
     }
+
     await index.setSettings({
       attributesForFaceting: ['searchable(brand)', 'searchable(categories)'],
       searchableAttributes: ['description', 'name', 'type'],
@@ -98,4 +99,4 @@ const postIndexToAlgolia = async (index) => {
   }
 };
 
-postIndexToAlgolia(index);
+postIndexToAlgolia(algoliaIndex);
