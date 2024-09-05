@@ -93,7 +93,13 @@ const postIndexToAlgolia = async () => {
 
     await index.setSettings({
       attributesForFaceting: ['searchable(brand)', 'searchable(categories)'],
-      searchableAttributes: ['description', 'name', 'type'],
+      searchableAttributes: [
+        'brand',
+        'categories',
+        'description',
+        'name',
+        'type',
+      ],
       customRanking: ['desc(popularity)', 'desc(rating)'],
     });
 
