@@ -4,7 +4,11 @@ import algoliasearch from 'algoliasearch';
 
 import data from '../data/products.json';
 
+import validateData from './validateData';
+
 // console.table(data[0]);
+
+const dataValid = validateData(data);
 
 // const categoryStore = {};
 
@@ -36,20 +40,24 @@ import data from '../data/products.json';
 // let cameraCount = 0;
 
 // search cat strings for cameras, then update item price
-const discountedData = data.map((item) => {
-  if (
-    item.categories.some((category) =>
-      category.toLowerCase().includes('cameras')
-    )
-  ) {
-    // cameraCount++;
-    return { ...item, price: Math.floor(item.price * 0.8) };
-  }
-  return item;
-});
+const discountedData = dataValid
+  ? data.map((item) => {
+      if (
+        item.categories.some((category) =>
+          category.toLowerCase().includes('cameras')
+        )
+      ) {
+        // cameraCount++;
+        return { ...item, price: Math.floor(item.price * 0.8) };
+      }
+      return item;
+    })
+  : [];
 
+// checking how many cameras' prices were updated:
 // console.log({ cameraCount });
 
+// checking to see if discount actually applied
 // const firstCam = data.find((item) => {
 //   return item.categories.some((category) =>
 //     category.toLowerCase().includes('cameras')
@@ -67,15 +75,15 @@ const discountedData = data.map((item) => {
 // if (firstCamSale) console.log(firstCamSale.price);
 
 // send discounted data to Algolia
-const client = algoliasearch(
-  process.env.ALGOLIA_APP_ID,
-  process.env.ALGOLIA_API_KEY
-);
+const postIndexToAlgolia = async () => {
+  if (!dataValid) return;
 
-const algoliaIndex = client.initIndex(process.env.ALGOLIA_INDEX);
-
-const postIndexToAlgolia = async (index) => {
   try {
+    const client = algoliasearch(
+      process.env.ALGOLIA_APP_ID,
+      process.env.ALGOLIA_API_KEY
+    );
+    const index = client.initIndex(process.env.ALGOLIA_INDEX);
     const indexExists = await index.exists();
 
     if (indexExists) {
@@ -99,4 +107,4 @@ const postIndexToAlgolia = async (index) => {
   }
 };
 
-postIndexToAlgolia(algoliaIndex);
+postIndexToAlgolia();
