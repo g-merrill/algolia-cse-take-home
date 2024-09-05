@@ -1,23 +1,4 @@
 function resultHit(hit, { html, sendEvent }) {
-  const handleAddToCart = () =>
-    sendEvent('conversion', hit, 'Added To Cart', {
-      // Special subtype
-      eventSubtype: 'addToCart',
-      // An array of objects representing each item added to the cart
-      objectData: [
-        {
-          // The price value for this item
-          price: hit.price,
-          // How many of this item were added
-          quantity: 1,
-        },
-      ],
-      // The total value of all items
-      value: hit.price,
-      // The currency code
-      currency: 'USD',
-    });
-
   const handleViewItem = () =>
     sendEvent('click', hit, 'Item Viewed', {
       objectData: [
@@ -30,6 +11,27 @@ function resultHit(hit, { html, sendEvent }) {
       currency: 'USD',
     });
 
+  const handleAddToCart = () =>
+    sendEvent('conversion', hit, 'Added To Cart', {
+      // Special subtype
+      eventSubtype: 'addToCart',
+      objectData: [
+        {
+          price: hit.price,
+          quantity: 1,
+        },
+      ],
+      value: hit.price,
+      currency: 'USD',
+    });
+
+  const parseHtmlChars = (value) =>
+    value
+      .replaceAll('<mark>', '')
+      .replaceAll('&#39;', "'")
+      .replaceAll('&quot;', '"')
+      .replaceAll('</mark>', '');
+
   return html`
     <div class="result-hit__wrapper">
       <div class="result-hit__image-container">
@@ -37,11 +39,7 @@ function resultHit(hit, { html, sendEvent }) {
       </div>
       <div class="result-hit__details">
         <h3 class="result-hit__name">
-          ${hit._highlightResult.name.value
-            .replaceAll('<mark>', '')
-            .replaceAll('&#39;', "'")
-            .replaceAll('&quot;', '"')
-            .replaceAll('</mark>', '')}
+          ${parseHtmlChars(hit._highlightResult.name.value)}
         </h3>
         <p class="result-hit__price">$${hit.price}</p>
       </div>

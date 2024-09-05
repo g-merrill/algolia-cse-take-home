@@ -14,8 +14,8 @@ import resultHit from '../templates/result-hit';
  * @description Instant Search class to display content on main page.
  */
 class ResultPage {
-  constructor() {
-    this._registerClient();
+  constructor({ userAcceptsCookies }) {
+    this._registerClient(userAcceptsCookies);
     this._registerWidgets();
     this._startSearch();
   }
@@ -26,7 +26,7 @@ class ResultPage {
    * @private
    * @returns {void}
    */
-  _registerClient() {
+  _registerClient(userAcceptsCookies) {
     this._searchClient = algoliasearch(
       process.env.ALGOLIA_APP_ID,
       process.env.ALGOLIA_API_KEY
@@ -35,7 +35,7 @@ class ResultPage {
     this._searchInstance = instantsearch({
       indexName: process.env.ALGOLIA_INDEX,
       searchClient: this._searchClient,
-      insights: true,
+      insights: userAcceptsCookies,
     });
   }
 

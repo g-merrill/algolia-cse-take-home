@@ -1,13 +1,27 @@
 import ResultsPage from './components/results-page';
 
 class SpencerAndWilliamsSearch {
-  constructor() {
-    this._initSearch();
+  constructor({ userAcceptsCookies }) {
+    this._initSearch(userAcceptsCookies);
   }
 
-  _initSearch() {
-    this.resultPage = new ResultsPage();
+  _initSearch(userAcceptsCookies) {
+    this.resultPage = new ResultsPage({ userAcceptsCookies });
   }
 }
 
-const app = new SpencerAndWilliamsSearch();
+// for demo purposes, assuming user accepts cookies
+const userAcceptsCookies = true;
+
+const app = new SpencerAndWilliamsSearch({ userAcceptsCookies });
+
+if (userAcceptsCookies) {
+  // assuming there is userAuth set up on their app already, using a dummy user token for now
+  const authenticatedUserToken = process.env.ALGOLIA_TEST_USER_TOKEN;
+  window.aa('setAuthenticatedUserToken', authenticatedUserToken);
+
+  window.aa('init', {
+    partial: true,
+    useCookie: true,
+  });
+}
