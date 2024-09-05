@@ -6,10 +6,13 @@ import data from '../data/products.json';
 
 import validateData from './validateData';
 
-// console.table(data[0]);
+// console.table(data[0]);  // see sampleRecord.json
+// console.log(data.length); // 10,000 records
 
+// not needed, but making sure there's uniform structure to the data before Algolia upload
 const dataValid = validateData(data);
 
+// exploring dataset:
 // const categoryStore = {};
 
 // data.forEach((item) => {
@@ -22,9 +25,7 @@ const dataValid = validateData(data);
 //   });
 // });
 
-// console.table(categoryStore);
-
-// should be 20 cameras categories
+// console.table(categoryStore); // counted that there are 20 "cameras" categories relevant to discount
 
 // const cameraCats = [];
 
@@ -34,8 +35,7 @@ const dataValid = validateData(data);
 //   }
 // });
 
-// console.log(cameraCats);
-// ^ confirmed there are 20 "cameras" categories
+// console.log(cameraCats); // confirmed there are 20 "cameras" categories
 
 // let cameraCount = 0;
 
@@ -56,23 +56,6 @@ const discountedData = dataValid
 
 // checking how many cameras' prices were updated:
 // console.log({ cameraCount });
-
-// checking to see if discount actually applied
-// const firstCam = data.find((item) => {
-//   return item.categories.some((category) =>
-//     category.toLowerCase().includes('cameras')
-//   );
-// });
-
-// if (firstCam) console.log(firstCam.price);
-
-// const firstCamSale = discountedData.find((item) => {
-//   return item.categories.some((category) =>
-//     category.toLowerCase().includes('cameras')
-//   );
-// });
-
-// if (firstCamSale) console.log(firstCamSale.price);
 
 // send discounted data to Algolia
 const postIndexToAlgolia = async () => {
