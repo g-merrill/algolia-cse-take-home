@@ -75,7 +75,7 @@ Can you fix it please?
 >
 >Hi Marc,
 >
->Thanks for reaching out.  I'll need to gather some more information about the issue before being able to help you effectively.  Can you provide any further context regarding which Algolia product you were having issues with?
+>Thanks for reaching out.  I'll need to gather some more information about the issue before being able to help you effectively.  Can you provide any further context regarding which Algolia product you were having issues with?  I see from the screenshot that you sent over that you might be interested in using 'searchkit' which is not affiliated with Algolia.  I'm happy to jump on a call with you to help answer any questions you might have about your current Algolia experience, and to learn what we can do to make it better!.
 >
 >Best,
 >Greg
